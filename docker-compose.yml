@@ -1,0 +1,50 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: travel-app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - travel-network
+    depends_on:
+      - db
+    ports:
+      - "5173:5173"
+
+  db:
+    image: mysql:8.0
+    container_name: travel-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: travel
+      MYSQL_USER: traveluser
+      MYSQL_PASSWORD: travelpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - travel-network
+
+  web:
+    image: nginx:alpine
+    container_name: travel-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html:cached
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - travel-network
+
+volumes:
+  db_data:
+
+networks:
+  travel-network:
+    driver: bridge
