@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ReviewController;
 
 // --- Авторизація ---
 Route::get('/login',  [LoginController::class, 'showLoginForm'])->name('login');
@@ -28,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout',          [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout',         [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/success/{booking}', [CheckoutController::class, 'success'])->name('checkout.success');
+
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
 Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');

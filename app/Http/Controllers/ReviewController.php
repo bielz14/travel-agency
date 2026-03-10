@@ -11,6 +11,6 @@ class ReviewController extends Controller
     {
         Review::create($request->all());
 
-        return redirect()->back()->with('success','Отзыв добавлен');
+        return redirect()->back()->with('success','Відгук доданий');
     }
 }
