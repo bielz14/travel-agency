@@ -8,4 +8,7 @@
 
     @include('partials.review-form')
 
+    @include('partials.section_expert')
+
+    @include('partials.section_partners')
 @endsection
