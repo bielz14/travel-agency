@@ -3,11 +3,11 @@ import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     server: {
-        host: '0.0.0.0',      // слушаем все интерфейсы внутри контейнера
+        host: '0.0.0.0',
         port: 5173,
         strictPort: true,
         hmr: {
-            host: 'localhost', // браузер коннектится сюда
+            host: 'localhost',
             protocol: 'ws',
             port: 5173,
         },
