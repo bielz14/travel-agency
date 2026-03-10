@@ -5,7 +5,7 @@
 @section('content')
 
     {{-- ── Баннер ── --}}
-    <div class="relative w-full overflow-hidden" style="height: 320px; margin-top: -4.5rem;">
+    <div class="relative w-full overflow-hidden" style="height: 400px; margin-top: -4.5rem;">
         <img src="{{ asset('images/banner.jpg') }}" alt="Тури" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.65) 100%);"></div>
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6" style="padding-top: 4.5rem;">
