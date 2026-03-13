@@ -1,7 +1,7 @@
-# Используем официальный PHP образ с FPM 8.4
+# Використовуємо офіційний PHP образ з FPM 8.4
 FROM php:8.4-fpm
 
-# Установка зависимостей и расширений PHP
+# Встановлення залежностей та розширень PHP
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -18,32 +18,47 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     zlib1g-dev \
     build-essential \
+    netcat-openbsd \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем Node.js 20 + npm
+# Встановлюємо Node.js 20 + npm
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-# Устанавливаем Composer
+# Встановлюємо Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Рабочая директория
+# Робоча директорія
 WORKDIR /var/www/html
 
-# Копируем проект
+# Спочатку тільки composer файли - для кешування шарів
+COPY composer.json composer.lock ./
+
+# Встановлюємо залежності Laravel
+RUN composer install --no-interaction --prefer-dist --no-scripts --optimize-autoloader --optimize-autoloader
+
+# Потім копіюємо весь код
 COPY . .
 
-# Устанавливаем зависимости Laravel
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Тепер запускаємо скрипти (package:discover тощо)
+RUN composer dump-autoload --optimize --ignore-platform-reqs
+RUN php artisan package:discover --ansi
+
+# Встановлюємо npm залежності та збираємо фронтенд
+RUN npm ci && npm run build
 
 # Права для папок Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Настройка PHP-FPM для TCP 9000
-RUN sed -i 's/listen = .*/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
+# Налаштування PHP-FPM для TCP 9000
+RUN echo '[www]' > /usr/local/etc/php-fpm.d/zz-docker.conf \
+    && echo 'listen = 0.0.0.0:9000' >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
-# expose порт
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Відкриваємо порт
 EXPOSE 9000
 
-CMD ["php-fpm"]
+ENTRYPOINT ["/entrypoint.sh"]
