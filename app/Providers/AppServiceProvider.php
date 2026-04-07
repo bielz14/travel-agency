@@ -29,10 +29,5 @@ class AppServiceProvider extends ServiceProvider
                 'cities' => City::all(),
             ]);
         });
-
-        if ($this->app->environment('local')) {
-            // Примусово задаємо URL для Dev Server Vite
-            Config::set('vite.dev_server.url', 'http://localhost:5173');
-        }
     }
 }

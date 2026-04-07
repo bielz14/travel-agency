@@ -19,7 +19,16 @@ until php -r "
     echo "  MySQL not ready, retrying in 2s..."
     sleep 2
 done
+
 echo "MySQL is ready!"
+
+# Якщо немає APP_KEY — генеруємо
+if [ -z "$APP_KEY" ]; then
+    php artisan key:generate --force --env=docker
+fi
+
+# Експортуємо APP_KEY з .env.docker в поточне середовище процесу
+export APP_KEY=$(grep APP_KEY .env.docker | cut -d'=' -f2)
 
 echo "Running migrations..."
 php artisan migrate --force || true
