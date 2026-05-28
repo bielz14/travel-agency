@@ -3,25 +3,6 @@ set -e
 
 cd /var/www/html
 
-echo "Waiting for MySQL..."
-until php -r "
-    try {
-        new PDO(
-            'mysql:host='.getenv('DB_HOST').';port='.getenv('DB_PORT').';dbname='.getenv('DB_DATABASE'),
-            getenv('DB_USERNAME'),
-            getenv('DB_PASSWORD')
-        );
-        exit(0);
-    } catch (Exception \$e) {
-        exit(1);
-    }
-"; do
-    echo "  MySQL not ready, retrying in 2s..."
-    sleep 2
-done
-
-echo "MySQL is ready!"
-
 # Якщо немає APP_KEY — генеруємо
 if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force --env=docker
