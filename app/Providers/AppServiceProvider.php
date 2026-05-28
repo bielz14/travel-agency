@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\Country;
 use App\Models\City;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
+
         View::composer('partials.header', function($view) {
             $view->with([
                 'countries' => Country::all(),
