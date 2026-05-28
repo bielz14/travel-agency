@@ -3,7 +3,8 @@ FROM php:8.4-fpm
 
 # Встановлення залежностей та розширень PHP
 RUN apt-get update && apt-get install -y \
-    libpq-dev \
+    git \
+    unzip \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     build-essential \
     netcat-openbsd \
-    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl zip \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Встановлюємо Node.js 20 + npm
