@@ -18,5 +18,6 @@ echo "Publishing Filament assets..."
 php artisan filament:assets || true
 
 echo "Starting PHP built-in server..."
+rm -rf public/build
 npm run build
 exec php -S 0.0.0.0:${PORT:-10000} -t public
