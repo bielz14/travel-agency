@@ -39,5 +39,6 @@ php artisan db:seed --force || true
 echo "Publishing Filament assets..."
 php artisan filament:assets || true
 
-echo "Starting PHP-FPM..."
-exec php-fpm -F
+echo "Starting PHP built-in server..."
+
+exec php -S 0.0.0.0:${PORT:-10000} -t public
