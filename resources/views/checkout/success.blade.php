@@ -47,11 +47,11 @@
                     </div>
                     <div class="flex justify-between">
                         <span style="color: rgba(255,255,255,0.45);">Email</span>
-                        <span class="text-white">{{ $booking->guest_email }}</span>
+                        <span class="text-white">{{ $booking->user->email }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span style="color: rgba(255,255,255,0.45);">Телефон</span>
-                        <span class="text-white">{{ $booking->guest_phone }}</span>
+                        <span class="text-white">{{ $booking->user->phone }}</span>
                     </div>
                     <div class="flex justify-between pt-2" style="border-top: 1px solid rgba(255,255,255,0.07);">
                         <span style="color: rgba(255,255,255,0.45);">Сума</span>

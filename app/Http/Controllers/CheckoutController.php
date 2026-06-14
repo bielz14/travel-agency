@@ -47,8 +47,6 @@ class CheckoutController extends Controller
                 'user_id'     => $user->id,
                 'tour_id'     => $tour->id,
                 'guests'      => $guests,
-                'guest_email' => $user->email,
-                'guest_phone' => $user->phone,
                 'total_price' => $tour->price * $guests,
                 'status'      => 'pending',
             ]);
